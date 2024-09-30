@@ -1,0 +1,10 @@
+so we making a blog aggregator
+-add rss feeds from the internet
+-store posts in postgreSQL db
+-follow and unfollow RSS feeds- view summaries in the terminal, with full links to posts 
+
+goals
+-go app with postgreSQL (i am pretty ok at go)
+-SQL to query and migrate database (sqlc and goose)
+-long running service that works in the background or something
+
