@@ -61,7 +61,7 @@ func getConfigFilePath() string {
 		fmt.Printf("Error getting home directory: %v\n", err)
 		os.Exit(1)
 	}
-	return homeDir + "/workspace/bloggy/.gatorconfig.json"
+	return homeDir + "/.gatorconfig.json"
 }
 
 func Coco() string {

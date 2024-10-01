@@ -8,3 +8,22 @@ goals
 -SQL to query and migrate database (sqlc and goose)
 -long running service that works in the background or something
 
+the main is all fucked up.
+What's the QRD on how it actually works.
+1. create a config. The config reads from a file in the root. 
+Config us just dbURL and current username.
+
+2. config is stored in the state. 
+State is currently just the config BUT it's a public thing that you pass.
+
+3. Create a map of commands.
+Map is stores in the commands struct.
+
+4. register the command. It's a name and a function. Probably a better way to do this.
+
+5. check the arguments. if too short, it's abort. 
+6. split arugments into command name and params.
+7. create a COMMAND which then runs, returning an error.
+
+Gotta rename things.
+I guess we using run . additional args more than like building and whatever.
