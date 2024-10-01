@@ -1,0 +1,15 @@
+version: "2"
+sql:
+  - schema: "sql/schema"
+    queries: "sql/queries"
+    engine: "postgresql"
+    gen:
+      go:
+        out: "internal/database"
+
+# beans
+# SQLC look in the sql/schema directory for uhh schema
+# and in the sql/queries directory for queries
+# and then generate go code in the internal/database directory
+# generate queries for postgreqsql
+# uhh that makes sense

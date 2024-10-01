@@ -1,8 +1,12 @@
 package main
 
-import "internal/config"
+import (
+	"bloggy/internal/database"
+	"internal/config"
+)
 
 type state struct {
+	db  *database.Queries
 	cfg *config.Config
 }
 
