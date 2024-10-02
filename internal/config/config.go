@@ -29,9 +29,7 @@ func Read() Config {
 		fmt.Printf("Error unmarshaling: %v\n", err)
 		os.Exit(1)
 	}
-
 	return cfg
-
 }
 
 func (cfg Config) SetUser(user string) {
@@ -56,7 +54,6 @@ func write(cfg Config) {
 
 func getConfigFilePath() string {
 	homeDir, err := os.UserHomeDir()
-
 	if err != nil {
 		fmt.Printf("Error getting home directory: %v\n", err)
 		os.Exit(1)

@@ -13,3 +13,10 @@ RETURNING *;
 -- name: GetUser :one
 SELECT * FROM users
 WHERE $1 = name;
+
+-- name: ResetUser :exec
+DELETE FROM users *;
+
+-- name: GetUsers :many
+SELECT * FROM users
+ORDER BY id;
