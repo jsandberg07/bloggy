@@ -17,12 +17,6 @@ func handlerFollow(s *state, cmd command, user database.User) error {
 
 	ctx := context.Background()
 
-	user, err := s.db.GetUser(ctx, s.cfg.CurrentUserName)
-	if err != nil {
-		fmt.Println("Couldn't get user while following a feed.")
-		return err
-	}
-
 	url := cmd.args[0]
 	feed, err := s.db.GetFeed(ctx, url)
 

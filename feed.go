@@ -11,13 +11,8 @@ import (
 )
 
 func handlerFeed(s *state, cmd command, user database.User) error {
-	ctx := context.Background()
-	currentUser, err := s.db.GetUser(ctx, s.cfg.CurrentUserName)
-	if err != nil {
-		return err
-	}
 
-	currentUserID := currentUser.ID
+	currentUserID := user.ID
 
 	if len(cmd.args) < 2 {
 		return errors.New("Feed creation requires name and URL")
@@ -35,6 +30,7 @@ func handlerFeed(s *state, cmd command, user database.User) error {
 		UserID:    currentUserID,
 	}
 
+	ctx := context.Background()
 	feed, err := s.db.CreateFeed(ctx, newFeed)
 	if err != nil {
 		return err
@@ -45,7 +41,7 @@ func handlerFeed(s *state, cmd command, user database.User) error {
 		ID:        uuid.New(),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
-		UserID:    currentUser.ID,
+		UserID:    user.ID,
 		FeedID:    feed.ID,
 	}
 	_, err = s.db.CreateFeedFollow(ctx, newFeedFollow)
