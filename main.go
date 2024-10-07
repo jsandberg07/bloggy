@@ -2,6 +2,7 @@ package main
 
 import (
 	"bloggy/internal/database"
+	"context"
 	"database/sql"
 	"fmt"
 	"internal/config"
@@ -20,6 +21,10 @@ func main() {
 
 	// fmt.Printf("// CHECK THIS URL: %v\n", s.cfg.DbURL)
 	db, err := sql.Open("postgres", s.cfg.DbURL)
+	if err != nil {
+		fmt.Printf("Error connecting to database: %v", err)
+		os.Exit(1)
+	}
 	dbQueries := database.New(db)
 	s.db = dbQueries
 
@@ -29,15 +34,16 @@ func main() {
 	}
 
 	// func handlerCommand(s *state, cmd command) error {}
+	// func login required handlerCommand(s *state, cmd command, user database.User) error {}
 	cmds.register("login", handlerLogin)
 	cmds.register("register", handlerRegister)
 	cmds.register("reset", handlerReset)
 	cmds.register("users", handlerGetUsers)
 	cmds.register("agg", handlerAgg)
-	cmds.register("addfeed", handlerFeed)
+	cmds.register("addfeed", middlewareLoggedIn(handlerFeed))
 	cmds.register("feeds", handlerGetFeeds)
-	cmds.register("follow", handlerFollow)
-	cmds.register("following", handlerFollowing)
+	cmds.register("follow", middlewareLoggedIn(handlerFollow))
+	cmds.register("following", middlewareLoggedIn(handlerFollowing))
 
 	arguments := os.Args
 	if len(arguments) < 2 {
@@ -59,4 +65,15 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println("")
+}
+
+func middlewareLoggedIn(handler func(s *state, cmd command, user database.User) error) func(*state, command) error {
+	return func(s *state, cmd command) error {
+		user, err := s.db.GetUser(context.Background(), s.cfg.CurrentUserName)
+		if err != nil {
+			return err
+		}
+
+		return handler(s, cmd, user)
+	}
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func handlerFeed(s *state, cmd command) error {
+func handlerFeed(s *state, cmd command, user database.User) error {
 	ctx := context.Background()
 	currentUser, err := s.db.GetUser(ctx, s.cfg.CurrentUserName)
 	if err != nil {
