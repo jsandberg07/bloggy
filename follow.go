@@ -56,3 +56,20 @@ func handlerFollowing(s *state, cmd command, user database.User) error {
 	}
 	return nil
 }
+
+func handlerUnfollow(s *state, cmd command, user database.User) error {
+	url := cmd.args[0]
+	ctx := context.Background()
+	uffuParams := database.UnfollowFeedForUserParams{
+		Url:    url,
+		UserID: user.ID,
+	}
+
+	err := s.db.UnfollowFeedForUser(ctx, uffuParams)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Feed unfollowed for user.")
+	return nil
+}

@@ -20,3 +20,14 @@ INNER JOIN users AS u ON ff.user_id = u.id
 INNER JOIN feeds AS f ON ff.feed_id = f.id
 WHERE $1 = u.name;
     
+-- name: UnfollowFeedForUser :exec
+WITH delete_batch AS (
+    SELECT feed_follows.id FROM feed_follows
+    INNER JOIN feeds ON feed_follows.feed_id = feeds.id
+    WHERE $1 = feeds.url
+    AND $2 = feed_follows.user_id
+)
+
+DELETE FROM feed_follows
+USING delete_batch
+WHERE delete_batch.id = feed_follows.id;

@@ -33,8 +33,8 @@ func main() {
 		cmdsMap: cmdMap,
 	}
 
-	// func handlerCommand(s *state, cmd command) error {}
-	// func login required handlerCommand(s *state, cmd command, user database.User) error {}
+	// regular handler: func handlerCommand(s *state, cmd command) error {}
+	// login required: func handlerCommand(s *state, cmd command, user database.User) error {}
 	cmds.register("login", handlerLogin)
 	cmds.register("register", handlerRegister)
 	cmds.register("reset", handlerReset)
@@ -44,6 +44,7 @@ func main() {
 	cmds.register("feeds", handlerGetFeeds)
 	cmds.register("follow", middlewareLoggedIn(handlerFollow))
 	cmds.register("following", middlewareLoggedIn(handlerFollowing))
+	cmds.register("unfollow", middlewareLoggedIn(handlerUnfollow))
 
 	arguments := os.Args
 	if len(arguments) < 2 {
