@@ -21,6 +21,7 @@ func handlerFeed(s *state, cmd command, user database.User) error {
 	feedName := cmd.args[0]
 	url := cmd.args[1]
 
+	msg("")
 	newFeed := database.CreateFeedParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now(),
@@ -29,12 +30,14 @@ func handlerFeed(s *state, cmd command, user database.User) error {
 		Url:       url,
 		UserID:    currentUserID,
 	}
+	msg("Created params")
 
 	ctx := context.Background()
 	feed, err := s.db.CreateFeed(ctx, newFeed)
 	if err != nil {
 		return err
 	}
+	msg("Created feed")
 
 	// create a feed follow record for the current user when they add a feed
 	newFeedFollow := database.CreateFeedFollowParams{
@@ -44,11 +47,14 @@ func handlerFeed(s *state, cmd command, user database.User) error {
 		UserID:    user.ID,
 		FeedID:    feed.ID,
 	}
+	msg("New Params")
+
 	_, err = s.db.CreateFeedFollow(ctx, newFeedFollow)
 	if err != nil {
 		fmt.Println("Error creating feed follow when adding feed for user.")
 		return err
 	}
+	msg("Feed follow created")
 
 	fmt.Println(feed)
 
