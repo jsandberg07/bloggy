@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -20,16 +21,16 @@ func handlerAgg(s *state, cmd command) error {
 		return err
 	}
 
-	fmt.Printf("Collecting feeds every %v", timeBetweenReqs)
-	// run it once now
-	err = scrapeFeeds(s)
-	if err != nil {
-		return err
-	}
-	// then loop
+	fmt.Printf("Collecting feeds every %v\n", timeBetweenReqs)
+
+	// loop
 	ticker := time.NewTicker(timeBetweenReqs)
 	for ; ; <-ticker.C {
-		scrapeFeeds(s)
+		err = scrapeFeeds(s)
+		if err != nil {
+			return err
+		}
+		log.Print("Scrape done.\n\n")
 	}
 
 	return nil
@@ -46,7 +47,7 @@ func scrapeFeeds(s *state) error {
 
 	// mark it as fetched
 	mffParams := database.MarkFeedFetchedParams{
-		LastFetchedAt: sql.NullTime{Time: time.Now()},
+		LastFetchedAt: sql.NullTime{Time: time.Now(), Valid: true},
 		ID:            nextFeed.ID,
 	}
 	err = s.db.MarkFeedFetched(ctx, mffParams)

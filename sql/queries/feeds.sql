@@ -21,7 +21,9 @@ SELECT * FROM feeds
 WHERE $1 = url;
 
 -- name: MarkFeedFetched :exec
-UPDATE feeds SET last_fetched_at = $1 AND updated_at = $1
+UPDATE feeds SET last_fetched_at = $1
+WHERE $2 = id;
+UPDATE feeds SET updated_at = $3
 WHERE $2 = id;
 
 -- name: GetNextFeedToFetch :one
